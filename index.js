@@ -1,10 +1,13 @@
 'use strict';
 
 // Imports dependencies and set up http server
-const
-  express = require('express'),
-  bodyParser = require('body-parser'),
-  app = express().use(bodyParser.json()); // creates express http server
+const express = require('express');
+const bodyParser = require('body-parser');
+const msgHandler = require('./message-handler')
+
+const app = express().use(bodyParser.json()); // creates express http server
+
+const VERIFY_TOKEN = process.env.VERIFY_TOKEN
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
@@ -19,11 +22,24 @@ app.post('/webhook', (req, res) => {
   
       // Iterates over each entry - there may be multiple if batched
       body.entry.forEach(function(entry) {
-  
-        // Gets the message. entry.messaging is an array, but 
-        // will only ever contain one message, so we get index 0
+
+        // Gets the body of the webhook event
         let webhook_event = entry.messaging[0];
         console.log(webhook_event);
+      
+      
+        // Get the sender PSID
+        let sender_psid = webhook_event.sender.id;
+        console.log('Sender PSID: ' + sender_psid);
+      
+        // Check if the event is a message or postback and
+        // pass the event to the appropriate handler function
+        if (webhook_event.message) {
+          msgHandler.handleMessage(sender_psid, webhook_event.message);        
+        } else if (webhook_event.postback) {
+          msgHandler.handlePostback(sender_psid, webhook_event.postback);
+        }
+        
       });
   
       // Returns a '200 OK' response to all requests
@@ -38,9 +54,6 @@ app.post('/webhook', (req, res) => {
   // Adds support for GET requests to our webhook
 app.get('/webhook', (req, res) => {
 
-    // Your verify token. Should be a random string.
-    let VERIFY_TOKEN = "pmmAgGtJEK"
-      
     // Parse the query params
     let mode = req.query['hub.mode'];
     let token = req.query['hub.verify_token'];
