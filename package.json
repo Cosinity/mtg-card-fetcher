@@ -1,0 +1,15 @@
+{
+  "name": "mtg-card-fetcher-webhook",
+  "version": "1.0.0",
+  "description": "A Facebook messenger bot to fetch Magic: The Gathering card info",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrew Costenoble",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3"
+  }
+}
