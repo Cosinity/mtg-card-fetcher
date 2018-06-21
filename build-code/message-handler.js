@@ -47,7 +47,7 @@ function callSendAPI(sender_psid, response) {
   }); 
 }
 
-export default {
+export {
     handleMessage,
     handlePostback,
     callSendAPI

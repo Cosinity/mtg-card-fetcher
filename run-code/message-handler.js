@@ -49,8 +49,6 @@ function callSendAPI(sender_psid, response) {
   });
 }
 
-exports.default = {
-  handleMessage: handleMessage,
-  handlePostback: handlePostback,
-  callSendAPI: callSendAPI
-};
+exports.handleMessage = handleMessage;
+exports.handlePostback = handlePostback;
+exports.callSendAPI = callSendAPI;
