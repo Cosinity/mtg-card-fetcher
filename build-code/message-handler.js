@@ -34,7 +34,6 @@ function handleMessage(sender_psid, received_message) {
         }
       } else {
         response = {
-          text: 'Your card:',
           attachment: {
             type: 'image',
             payload: {
@@ -44,7 +43,6 @@ function handleMessage(sender_psid, received_message) {
         };
       }
       // Sends the response message
-      console.log(response);
       callSendAPI(sender_psid, response);
     });
   }
@@ -72,6 +70,7 @@ function callSendAPI(sender_psid, response) {
     "method": "POST",
     "json": request_body
   }, (err, res, body) => {
+    console.log(body);
     if (!err) {
       console.log('message sent!')
     } else {
