@@ -12,20 +12,29 @@ function handleMessage(sender_psid, received_message) {
   
       // Parse the message to find any card names
       const regEx = /\[\[.*\]\]/g;
-      const cardNames = received_message.text.match(regEx);
-      let respText = '';
-      if (cardNames) {
-        respText = cardNames.join();
-        respText = respText.replace(/\[|\]/g, '');
+      const cardNamesArr = received_message.text.match(regEx);
+      let cardNames = '';
+      if (cardNamesArr) {
+        cardNames = cardNamesArr[0];
+        cardNames = cardNames.replace(/\[|\]/g, '').replace(' ', '+');
       }
 
-      response = {
-        text: `Cards: ${respText}`
-      };
-    }  
-    
-    // Sends the response message
-    callSendAPI(sender_psid, response);
+      request({
+        'uri': `https://api.scryfall.com/cards/named?fuzzy=${cardNames}`,
+        'method': 'GET'
+      }, (err, res, body) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        const card = JSON.parse(body);
+        response = {
+          text: `${card.image_uris.normal}`
+        };
+        // Sends the response message
+        callSendAPI(sender_psid, response);
+      });
+    }
 }
 
 // Handles messaging_postbacks events
