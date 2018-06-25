@@ -30,7 +30,7 @@ function handleMessage(sender_psid, received_message) {
         const card = JSON.parse(body);
         if (card.status === 404) {
           response = {
-            text: `${body.details}`
+            text: `${card.details}`
           }
         } else {
           response = {
