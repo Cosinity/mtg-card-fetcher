@@ -1,6 +1,7 @@
 const request = require('request');
 
-const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+const PAGE_ACCESS_TOKEN = 'EAACWivIS0UsBAIby98sVKffhuFmlJfl0K1vLYTPtzB5iwjOrUiDL9ZCrjlo6VVchBRgGblin2ZB1guS1f5BHinGIf8K88iEGC96hf1PbtmSo0dwxC9i8F6sX0Rs4fKKeFE6qaa2B3AzvKZCr3LXZAnxbWZBXYHiR3PJ9g7olkWgZDZD'
+
 
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
@@ -26,7 +27,6 @@ function handlePostback(sender_psid, received_postback) {
 
 // Sends response messages via the Send API
 function callSendAPI(sender_psid, response) {
-  console.log(process.env);
   // Construct the message body
   let request_body = {
     "recipient": {
