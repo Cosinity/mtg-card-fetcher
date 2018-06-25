@@ -5,43 +5,49 @@ const PAGE_ACCESS_TOKEN = 'EAACWivIS0UsBAIby98sVKffhuFmlJfl0K1vLYTPtzB5iwjOrUiDL
 
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
-    let response;
+  let response;
 
-    // Check if the message contains text
-    if (received_message.text) {
-  
-      // Parse the message to find any card names
-      const regEx = /\[\[.*\]\]/g;
-      const cardNamesArr = received_message.text.match(regEx);
-      let cardNames = '';
-      if (cardNamesArr) {
-        cardNames = cardNamesArr[0];
-        cardNames = cardNames.replace(/\[|\]/g, '').replace(' ', '+');
-      }
+  // Check if the message contains text
+  if (received_message.text) {
 
-      request({
-        'uri': `https://api.scryfall.com/cards/named?fuzzy=${cardNames}`,
-        'method': 'GET'
-      }, (err, res, body) => {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        const card = JSON.parse(body);
-        if (card.status === 404) {
-          response = {
-            text: `${card.details}`
-          }
-        } else {
-          response = {
-            text: `'Your card:'`,
-            attachment: `${card.image_uris.normal}`
-          };
-        }
-        // Sends the response message
-        callSendAPI(sender_psid, response);
-      });
+    // Parse the message to find any card names
+    const regEx = /\[\[.*\]\]/g;
+    const cardNamesArr = received_message.text.match(regEx);
+    let cardNames = '';
+    if (cardNamesArr) {
+      cardNames = cardNamesArr[0];
+      cardNames = cardNames.replace(/\[|\]/g, '').replace(' ', '+');
     }
+
+    request({
+      'uri': `https://api.scryfall.com/cards/named?fuzzy=${cardNames}`,
+      'method': 'GET'
+    }, (err, res, body) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      const card = JSON.parse(body);
+      if (card.status === 404) {
+        response = {
+          text: `${card.details}`
+        }
+      } else {
+        response = {
+          text: 'Your card:',
+          attachment: {
+            type: 'image',
+            payload: {
+              'url': `${card.image_uris.normal}`
+            }
+          }
+        };
+      }
+      // Sends the response message
+      console.log(response);
+      callSendAPI(sender_psid, response);
+    });
+  }
 }
 
 // Handles messaging_postbacks events
