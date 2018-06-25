@@ -26,6 +26,7 @@ function handlePostback(sender_psid, received_postback) {
 
 // Sends response messages via the Send API
 function callSendAPI(sender_psid, response) {
+  console.log(PAGE_ACCESS_TOKEN);
   // Construct the message body
   let request_body = {
     "recipient": {
@@ -43,7 +44,6 @@ function callSendAPI(sender_psid, response) {
   }, (err, res, body) => {
     if (!err) {
       console.log('message sent!')
-      console.log(res);
     } else {
       console.error("Unable to send message:" + err);
     }
