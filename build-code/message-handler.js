@@ -8,12 +8,16 @@ function handleMessage(sender_psid, received_message) {
     let response;
 
     // Check if the message contains text
-    if (received_message.text) {    
+    if (received_message.text) {
   
       // Parse the message to find any card names
       const regEx = /\[\[.*\]\]/g;
       const cardNames = received_message.text.match(regEx);
-      const respText = cardNames.join();
+      let respText = '';
+      if (cardNames) {
+        respText = cardNames.join();
+        respText = respText.replace(/\[|\]/g, '');
+      }
 
       response = {
         text: `Cards: ${respText}`
@@ -51,7 +55,7 @@ function callSendAPI(sender_psid, response) {
     } else {
       console.error("Unable to send message:" + err);
     }
-  }); 
+  });
 }
 
 export {
