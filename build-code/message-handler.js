@@ -34,7 +34,8 @@ function handleMessage(sender_psid, received_message) {
           }
         } else {
           response = {
-            text: `${card.image_uris.normal}`
+            text: `''`,
+            attachment: `${card.image_uris.normal}`
           };
         }
         // Sends the response message
