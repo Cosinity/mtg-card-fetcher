@@ -28,9 +28,15 @@ function handleMessage(sender_psid, received_message) {
           return;
         }
         const card = JSON.parse(body);
-        response = {
-          text: `${card.image_uris.normal}`
-        };
+        if (card.status === 404) {
+          response = {
+            text: `${body.details}`
+          }
+        } else {
+          response = {
+            text: `${card.image_uris.normal}`
+          };
+        }
         // Sends the response message
         callSendAPI(sender_psid, response);
       });
